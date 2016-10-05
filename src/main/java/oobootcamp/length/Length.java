@@ -1,12 +1,14 @@
 package oobootcamp.length;
 
+import oobootcamp.length.convert.Converter;
+
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class Length {
 
-    final private Double length;
     final private String unit;
+    final private Double length;
 
     public Length(String length) {
 
@@ -34,26 +36,31 @@ public class Length {
         if (this == obj) return true;
         if (obj == null) return false;
         if (obj instanceof Length) {
-            Double first;
-            Double second;
-            if (((Length) obj).getUnit().equals("M")) {
-                first = ((Length) obj).getLength() * 1000;
-            } else if (((Length) obj).unit.equals("CM")){
-                first = ((Length) obj).getLength() * 10;
-            } else {
-                first = ((Length) obj).getLength();
-            }
-
-            if (this.getUnit().equals("M")) {
-                second = this.getLength() * 1000;
-            } else if (this.getUnit().equals("CM")) {
-                second = this.getLength() * 10;
-            } else {
-                second = this.getLength();
-            }
-
+            Double first = Converter.convert((Length) obj).getLength();
+            Double second = Converter.convert(this).getLength();
             return first.compareTo(second) == 0;
         }
         return super.equals(obj);
+    }
+
+    public Length add(Length length) {
+        Double first = Converter.convert(length).getLength();
+        Double second = Converter.convert(this).getLength();
+        return new Length(first + second + "MM");
+    }
+
+    public Length minus(Length length) {
+        Double first = Converter.convert(this).getLength();
+        Double second = Converter.convert(length).getLength();
+        Double result = first - second;
+        return new Length(result + "MM");
+    }
+
+    public Length multiply(Integer times) {
+        return new Length(length * times + unit);
+    }
+
+    public Length divide(Integer divisor) {
+        return new Length(length / divisor + unit);
     }
 }
