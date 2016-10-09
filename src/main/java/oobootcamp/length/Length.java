@@ -1,7 +1,5 @@
 package oobootcamp.length;
 
-import oobootcamp.length.convert.Converter;
-
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -23,6 +21,18 @@ public class Length {
         }
     }
 
+    public Length convert() {
+        if (getUnit().equals("M")) {
+            Double value = getLength() * 1000;
+            return new Length(value + "MM");
+        } else if (getUnit().equals("CM")) {
+            Double value = getLength() * 10;
+            return new Length(value + "MM");
+        } else {
+            return new Length(getLength() + "MM");
+        }
+    }
+
     public String getUnit() {
         return unit;
     }
@@ -36,22 +46,22 @@ public class Length {
         if (this == obj) return true;
         if (obj == null) return false;
         if (obj instanceof Length) {
-            Double first = Converter.convert((Length) obj).getLength();
-            Double second = Converter.convert(this).getLength();
+            Double first = ((Length) obj).convert().getLength();
+            Double second = this.convert().getLength();
             return first.compareTo(second) == 0;
         }
         return super.equals(obj);
     }
 
     public Length add(Length length) {
-        Double first = Converter.convert(length).getLength();
-        Double second = Converter.convert(this).getLength();
+        Double first = length.convert().getLength();
+        Double second = this.convert().getLength();
         return new Length(first + second + "MM");
     }
 
     public Length minus(Length length) {
-        Double first = Converter.convert(this).getLength();
-        Double second = Converter.convert(length).getLength();
+        Double first = this.convert().getLength();
+        Double second = length.convert().getLength();
         Double result = first - second;
         return new Length(result + "MM");
     }
